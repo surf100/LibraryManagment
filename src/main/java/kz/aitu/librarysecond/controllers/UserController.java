@@ -25,25 +25,37 @@ public class UserController {
 
     @GetMapping("/")
     public List<User> getAll(){
-        return service.getAll();
+        return service.getAllUser();
     }
 
     @GetMapping("/{user_id}")
     public ResponseEntity<User> getById(@PathVariable("user_id") int id){
         User user = service.getById(id);
         if(user == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); //404
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        return new ResponseEntity<>(user, HttpStatus.OK); //200
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping("/")
-    public ResponseEntity<User> create(@RequestBody User user){
+    @PostMapping("/reg")
+    public ResponseEntity<String> register(@RequestBody User user) {
         User createdUser = service.create(user);
-        if(createdUser == null)
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED); //201
+        if (createdUser != null) {
+            return new ResponseEntity<>("Registration successful", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>("Registration failed", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PostMapping("/log")
+    public ResponseEntity<String> login(@RequestBody User loginUser) {
+        String email = loginUser.getEmail();
+        String password = loginUser.getPassword();
+        User userFromDb = service.getUserByEmail(email);
+        if (userFromDb != null && userFromDb.getPassword().equals(password)) {
+            return new ResponseEntity<>("Login successful", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Invalid email or password", HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @GetMapping("/surname/{user_surname}")
