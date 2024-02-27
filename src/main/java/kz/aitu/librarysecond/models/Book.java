@@ -11,9 +11,9 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int number;
     private String name;
-    private int year_of_publication;
+    private int year;
     private String type;
-    private int number_of_readers;
+    private int readers;
     private float price;
-    private boolean has_a_price;
+    private boolean has_price;
 }
