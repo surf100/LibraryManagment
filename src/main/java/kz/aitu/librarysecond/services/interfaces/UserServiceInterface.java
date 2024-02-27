@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface UserServiceInterface {
-    List<User> getAll();
+    List<User> getAllUser();
     User getById(int id);
     User create(User user);
     List<User> getBySurname(String surname);
+
+    User getUserByEmail(String email);
 }
