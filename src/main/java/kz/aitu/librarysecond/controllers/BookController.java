@@ -6,6 +6,9 @@ import kz.aitu.librarysecond.services.interfaces.BookServiceInterface;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -19,19 +22,31 @@ public class BookController {
     }
 
     @GetMapping("hello")
-    public String sayHello(){
+    public String sayHello() {
         return "Hello World";
     }
 
     @GetMapping("/")
-    public List<Book> getAll(){
+    public List<Book> getAll() {
         return service.getAllBooks();
     }
-    @GetMapping("/top/{number_of_readers}")
-    public ResponseEntity<Book> getBooksByNumberOfReaders(@PathVariable("number_of_readers") int number_of_readers){
-        Book book = (Book) service.getByNOR(number_of_readers);
-        if(book==null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);}
-        return new ResponseEntity<>(book, HttpStatus.OK);
+
+    @GetMapping("/top")
+    public List<Book> rating() {
+        List<Book> books = service.getAllBooks();
+        List<Book> topBooks = new ArrayList<>();
+        if (!books.isEmpty()) {
+            Collections.sort(books, (b1, b2) -> Double.compare(b2.getReaders(), b1.getReaders()));
+            for (int i = 0; i < Math.min(3, books.size()); i++) {
+                topBooks.add(books.get(i));
+            }
+        }
+
+        return topBooks;
     }
+    @GetMapping("/take/{book_number}")
+    public List<Book> takeBook(@PathVariable("book_number") int number){
+        return service.takeBook(number);
+    }
+
 }
