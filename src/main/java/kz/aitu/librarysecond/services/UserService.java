@@ -15,7 +15,7 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAllUser() {
         return repo.findAll();
     }
 
@@ -33,6 +33,12 @@ public class UserService implements UserServiceInterface {
     public List<User> getBySurname(String surname) {
         return repo.findBySurname(surname);
     }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return repo.findByEmail(email);
+    }
+
 
 
 }
