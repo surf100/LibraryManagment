@@ -3,7 +3,6 @@ package kz.aitu.librarysecond.services;
 import kz.aitu.librarysecond.models.Book;
 import kz.aitu.librarysecond.repositories.BookRepositoryInterface;
 import kz.aitu.librarysecond.services.interfaces.BookServiceInterface;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -11,8 +10,6 @@ import java.util.List;
 public class BookService implements BookServiceInterface {
 
     private final BookRepositoryInterface bookRepository;
-
-    @Autowired
     public BookService(BookRepositoryInterface bookRepository) {
         this.bookRepository = bookRepository;
     }
@@ -23,7 +20,33 @@ public class BookService implements BookServiceInterface {
     }
 
     @Override
-    public List<Book> getByNOR(int numberOfReaders) {
-        return bookRepository.findByNumberOfReaders(numberOfReaders);
+    public List<Book> takeBook(int number) {
+        List<Book> books = bookRepository.findByNumber(number);
+        if (!books.isEmpty()) {
+            Book book = books.get(0);
+            if(book.isHas_price()){
+                return null;
+            }
+            book.setReaders(book.getReaders() + 1);
+            bookRepository.save(book);
+            return books;
+        }
+        return null;
     }
+
+    @Override
+    public List<Book> buyBook(int number) {
+        List<Book> books = bookRepository.findByNumber(number);
+        if (!books.isEmpty()) {
+            Book book = books.get(0);
+            if(!book.isHas_price()){
+                return null;
+            }
+            book.setReaders(book.getReaders() + 1);
+            bookRepository.save(book);
+            return books;
+        }
+        return null;
+    }
+
 }
