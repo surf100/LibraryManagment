@@ -6,6 +6,8 @@ import kz.aitu.librarysecond.services.interfaces.UserServiceInterface;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class UserService implements UserServiceInterface {
     public UserRepositoryInterface repo;
@@ -17,11 +19,6 @@ public class UserService implements UserServiceInterface {
     @Override
     public List<User> getAllUser() {
         return repo.findAll();
-    }
-
-    @Override
-    public User getById(int id) {
-        return repo.findById(id).orElse(null);
     }
 
     @Override
@@ -39,6 +36,21 @@ public class UserService implements UserServiceInterface {
         return repo.findByEmail(email);
     }
 
+    @Override
+    public float getUserBalanceById(int userId) {
+        Optional<User> userOptional = repo.findById(userId);
+        return userOptional.map(User::getBalance).orElse(0f);
+    }
+    @Override
+    public void topUpBalance(int userId, float amount) {
+        Optional<User> userList = repo.findById(userId);
+        if (!userList.isEmpty()) {
+            User user = userList.get();
+            float currentBalance = user.getBalance();
+            user.setBalance(currentBalance + amount);
+            repo.save(user);
+        }
+    }
 
 
 }
