@@ -48,5 +48,12 @@ public class BookController {
     public List<Book> takeBook(@PathVariable("book_number") int number){
         return service.takeBook(number);
     }
+    @PostMapping("/add-book/")
+    public ResponseEntity<Book> addBook(@RequestBody Book book){
+        Book createdBook = service.create(book);
+        if(createdBook == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(createdBook, HttpStatus.CREATED);
+    }
 
 }
