@@ -25,12 +25,12 @@ public class BookController {
     public String sayHello() {
         return "Hello World";
     }
-
+// localhost:8081/  take all getAllBooks
     @GetMapping("/")
     public List<Book> getAll() {
         return service.getAllBooks();
     }
-
+// localhost:8081/top shows rating books
     @GetMapping("/top")
     public List<Book> rating() {
         List<Book> books = service.getAllBooks();
