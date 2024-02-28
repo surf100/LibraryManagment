@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface UserServiceInterface {
     List<User> getAllUser();
-    User getById(int id);
     User create(User user);
     List<User> getBySurname(String surname);
 
     User getUserByEmail(String email);
+    float getUserBalanceById(int userId);
+
+    void topUpBalance(int userId, float amount);
 }
