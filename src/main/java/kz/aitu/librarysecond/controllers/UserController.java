@@ -54,6 +54,9 @@ public class UserController {
     public List<User> getAllBySurname(@PathVariable("user_surname") String surname){
         return service.getBySurname(surname);
     }
+
+
+    
     @GetMapping("/balance/{user_id}")
     public ResponseEntity<Float> getUserBalanceById(@PathVariable("user_id") int userId) {
         float balance = service.getUserBalanceById(userId);
@@ -63,6 +66,19 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+/* 
+JSON Postman
+{
+    "name": "pohod",
+    "year": 1889,
+    "type": "history",
+    "readers": 0,
+    "has_price": true,
+    "price": 9999
+}
+*/
     @PostMapping("/up/{user_id}/{amount}")
     public ResponseEntity<String> topUpBalance(@PathVariable("user_id") int userId, @PathVariable("amount") float amount) {
         service.topUpBalance(userId, amount);
