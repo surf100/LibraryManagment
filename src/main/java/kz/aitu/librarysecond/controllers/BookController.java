@@ -55,6 +55,7 @@ public class BookController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(createdBook, HttpStatus.CREATED);
     }
+//localhost:8082/books/buy/номер
     @PostMapping("/buy/{book_number}")public ResponseEntity<?> buyBook(@PathVariable("book_number") int number, @RequestBody User enterUser) {
     String email = enterUser.getEmail();    String password = enterUser.getPassword();
     User userDb = userService.getUserByEmail(email);
