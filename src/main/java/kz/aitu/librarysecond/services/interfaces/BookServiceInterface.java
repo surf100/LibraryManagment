@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface BookServiceInterface {
     List<Book> getAllBooks();
     List<Book> takeBook(int number);
+    Book buyBook(int number);
     Book create(Book book);
 }
 
