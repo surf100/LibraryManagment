@@ -9,9 +9,8 @@ public interface UserServiceInterface {
     List<User> getAllUser();
     User create(User user);
     List<User> getBySurname(String surname);
-
+    void topUpBalance(int userId, float amount);
     User getUserByEmail(String email);
     float getUserBalanceById(int userId);
-
-    void topUpBalance(int userId, float amount);
+    
 }
