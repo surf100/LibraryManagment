@@ -68,22 +68,7 @@ public class UserController {
     }
 
 
-/* 
-JSON Postman
-{
-    "name": "pohod",
-    "year": 1889,
-    "type": "history",
-    "readers": 0,
-    "has_price": true,
-    "price": 9999
-}
-*/
-    @PostMapping("/up/{user_id}/{amount}")
-    public ResponseEntity<String> topUpBalance(@PathVariable("user_id") int userId, @PathVariable("amount") float amount) {
-        service.topUpBalance(userId, amount);
-        return new ResponseEntity<>("Balance topped up successfully", HttpStatus.OK);
-    }
+
 @GetMapping("/balance/{user_id}")
     public ResponseEntity<?> getUserBalanceById(@PathVariable("user_id") int userId) {
     float balance = service.getUserBalanceById(userId);
@@ -92,6 +77,11 @@ JSON Postman
     } else {
         return new ResponseEntity<>("Oops unknown error occured",HttpStatus.NOT_FOUND);    }
 }
+    @PostMapping("/up/{user_id}/{amount}")
+    public ResponseEntity<String> topUpBalance(@PathVariable("user_id") int userId, @PathVariable("amount") float amount) {
+        service.topUpBalance(userId, amount);    
+        return new ResponseEntity<>("Balance topped up successfully", HttpStatus.OK);
+    }
 }
 
 
