@@ -17,28 +17,29 @@ public class UserController {
     public UserController(UserServiceInterface service) {
         this.service = service;
     }
-
-    @GetMapping("hello")
-    public String sayHello(){
-        return "Hello World";
-    }
-
     @GetMapping("/")
     public List<User> getAll(){
         return service.getAllUser();
     }
 
-    @PostMapping("/reg")
+    @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody User user) {
-        User createdUser = service.create(user);
-        if (createdUser != null) {
-            return new ResponseEntity<>("Registration successful", HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>("Registration failed", HttpStatus.INTERNAL_SERVER_ERROR);
+        User isInDb =  service.getUserByEmail(user.getEmail());
+        if (isInDb == null){
+            User newUser = service.create(user);
+            if(newUser==null){
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            else{
+                return new ResponseEntity<>("Registration successful",HttpStatus.CREATED);
+            }
+        }
+        else{
+            return new ResponseEntity<>("Registration failed", HttpStatus.UNAUTHORIZED);
         }
     }
 
-    @PostMapping("/log")
+    @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody User loginUser) {
         String email = loginUser.getEmail();
         String password = loginUser.getPassword();
@@ -54,35 +55,19 @@ public class UserController {
     public List<User> getAllBySurname(@PathVariable("user_surname") String surname){
         return service.getBySurname(surname);
     }
-
-
-    
     @GetMapping("/balance/{user_id}")
-    public ResponseEntity<Float> getUserBalanceById(@PathVariable("user_id") int userId) {
+    public ResponseEntity<?> getUserBalanceById(@PathVariable("user_id") int userId) {
         float balance = service.getUserBalanceById(userId);
         if (balance >= 0) {
-            return ResponseEntity.ok(balance);
+            return new ResponseEntity<>(balance,HttpStatus.OK);
         } else {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>("Oops unknown error occured",HttpStatus.NOT_FOUND);
         }
     }
-
-
-
-@GetMapping("/balance/{user_id}")
-    public ResponseEntity<?> getUserBalanceById(@PathVariable("user_id") int userId) {
-    float balance = service.getUserBalanceById(userId);
-    if (balance >= 0) {
-        return new ResponseEntity<>(balance,HttpStatus.OK);
-    } else {
-        return new ResponseEntity<>("Oops unknown error occured",HttpStatus.NOT_FOUND);    }
-}
     @PostMapping("/up/{user_id}/{amount}")
     public ResponseEntity<String> topUpBalance(@PathVariable("user_id") int userId, @PathVariable("amount") float amount) {
-        service.topUpBalance(userId, amount);    
+        service.topUpBalance(userId, amount);
         return new ResponseEntity<>("Balance topped up successfully", HttpStatus.OK);
     }
+
 }
-
-
-
