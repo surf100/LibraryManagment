@@ -11,5 +11,6 @@ public interface BookServiceInterface {
     List<Book> takeBook(int number);
     Book buyBook(int number);
     Book create(Book book);
+    float getUserBalanceById(int userId);
 }
 
