@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface BookRepositoryInterface extends JpaRepository<Book, Integer> {
     List<Book> findByNumber(int number);
+    List<Book> findByType(String type);
 }
 
