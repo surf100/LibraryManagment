@@ -38,9 +38,9 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public float getUserBalanceById(int userId) {
-        Optional<User> userOptional = repo.findById(userId);
-        return userOptional.map(User::getBalance).orElse(0f);
-    }
+    User user  = userRepository.findById(userId).stream().findFirst().orElse(null);
+    return user.getBalance();
+}
     @Override
     public void topUpBalance(int userId, float amount) {
         Optional<User> userList = repo.findById(userId);
@@ -49,6 +49,7 @@ public class UserService implements UserServiceInterface {
             float currentBalance = user.getBalance();
             user.setBalance(currentBalance + amount);
             repo.save(user);
+}
         }
     }
 
