@@ -25,12 +25,19 @@ public class UserService implements UserServiceInterface {
     public User create(User user) {
         return repo.save(user);
     }
-
+    
     @Override
     public List<User> getBySurname(String surname) {
         return repo.findBySurname(surname);
     }
 
+    @Override
+    public void topUpBalance(int userId, float amount) {
+    User user  = userRepository.findById(userId).stream().findFirst().orElse(null);    
+        user.setBalance(user.getBalance()+amount);
+        userRepository.save(user);
+    }
+    
     @Override
     public User getUserByEmail(String email) {
         return repo.findByEmail(email);
@@ -41,17 +48,6 @@ public class UserService implements UserServiceInterface {
     User user  = userRepository.findById(userId).stream().findFirst().orElse(null);
     return user.getBalance();
 }
-    @Override
-    public void topUpBalance(int userId, float amount) {
-        Optional<User> userList = repo.findById(userId);
-        if (!userList.isEmpty()) {
-            User user = userList.get();
-            float currentBalance = user.getBalance();
-            user.setBalance(currentBalance + amount);
-            repo.save(user);
-}
-        }
+    
     }
-
-
 }
