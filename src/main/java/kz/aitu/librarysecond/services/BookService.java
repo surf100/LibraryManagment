@@ -5,20 +5,18 @@ import kz.aitu.librarysecond.models.User;
 import kz.aitu.librarysecond.repositories.BookRepositoryInterface;
 import kz.aitu.librarysecond.repositories.UserRepositoryInterface;
 import kz.aitu.librarysecond.services.interfaces.BookServiceInterface;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BookService implements BookServiceInterface {
 
     private final BookRepositoryInterface bookRepository;
-    private final UserRepositoryInterface userRepository;
-    public BookService(BookRepositoryInterface bookRepository, UserRepositoryInterface userRepository) {
+
+    public BookService(BookRepositoryInterface bookRepository) {
         this.bookRepository = bookRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -40,19 +38,26 @@ public class BookService implements BookServiceInterface {
         }
         return null;
     }
-
     @Override
     public Book create(Book book) {
         return bookRepository.save(book);
     }
+
     @Override
     public Book buyBook(int number) {
-        Book book  = bookRepository.findByNumber(number).stream().findFirst().orElse(null);    if(book!=null && book.isHas_price()) {
-            book.setReaders(book.getReaders() + 1);        bookRepository.save(book);
+        Book book  = bookRepository.findByNumber(number).stream().findFirst().orElse(null);
+        if(book!=null && book.isHas_price()) {
+            book.setReaders(book.getReaders() + 1);
+            bookRepository.save(book);
             return book;
         }
         return null;
     }
-
+    @Override
+    public List<Book> getByType(String type) {
+        return bookRepository.findByType(type);
+    }
 
 }
+
+
