@@ -45,6 +45,14 @@ public class BookService implements BookServiceInterface {
     public Book create(Book book) {
         return bookRepository.save(book);
     }
+    @Override
+    public Book buyBook(int number) {
+        Book book  = bookRepository.findByNumber(number).stream().findFirst().orElse(null);    if(book!=null && book.isHas_price()) {
+            book.setReaders(book.getReaders() + 1);        bookRepository.save(book);
+            return book;
+        }
+        return null;
+    }
 
 
 }
