@@ -96,5 +96,21 @@ public class BookController {
     public List<Book> getByType(@PathVariable("book_type") String type){
         return service.getByType(type);
     }
+    @PostMapping("/buy/{book_number}")
+    public ResponseEntity<?> buyBook(@PathVariable("book_number") int number, @RequestBody User enterUser) {
+    String email = enterUser.getEmail();    String password = enterUser.getPassword();
+    User userDb = userService.getUserByEmail(email);
+    if (userDb != null && userDb.getPassword().equals(password)) {
+        Book book = service.buyBook(number);        if (book != null) {
+            if (book.isHas_price()) {                User user = userRepository.findByEmail(email);
+                double bookPrice = book.getPrice();                if (user.getBalance() >= bookPrice) {
+                    user.setBalance((float) (user.getBalance() - bookPrice));                    userRepository.save(user);
+                    return new ResponseEntity<>(book, HttpStatus.OK);                } else {
+                    return new ResponseEntity<>("Insufficient balance", HttpStatus.BAD_REQUEST);                }
+            } else {                return new ResponseEntity<>("Book is free", HttpStatus.BAD_REQUEST);
+            }        } else {
+            return new ResponseEntity<>("Book not found", HttpStatus.NOT_FOUND);        }
+    } else {        return new ResponseEntity<>("Invalid email or password", HttpStatus.UNAUTHORIZED);
+    }}
 
 }
