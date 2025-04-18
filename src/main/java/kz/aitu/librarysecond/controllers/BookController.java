@@ -52,6 +52,18 @@ public class BookController {
     public List<Book> takeBook(@PathVariable("book_number") int number){
         return service.takeBook(number);
     }
+
+    /*
+    POST
+   {
+    "name": "pohod",
+    "year": 1889,
+    "type": "history",
+    "readers": 0,
+    "has_price": true,
+    "price": 9999
+    }
+     */
     @PostMapping("/add-book/")
     public ResponseEntity<?> addBook(@RequestBody Book book) {
         Book createdBook = service.create(book);
