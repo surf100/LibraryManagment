@@ -39,8 +39,6 @@
 
 LibrarySecond/ ├── src/ │ ├── Main.java # Точка входа │ └── library/ │ ├── Book.java # Класс книги │ ├── User.java # Класс пользователя │ └── Library.java # Класс библиотеки
 
-yaml
-Копировать код
 
 ---
 
